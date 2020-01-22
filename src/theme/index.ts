@@ -7,6 +7,23 @@ import {
   GlobalTheme
 } from "./types";
 
+const VALID_COLOR_HEX = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i;
+
+/**
+ * Converts a 6-digit hex colour into RGBA and applies the desired alpha
+ * @param {string} color - #RRGGBB hex colour code from theme
+ * @param {number} alpha - transparency level to apply (e.g. 0.2)
+ * @return {string} CSS-consumable string of format "rgba(rrr, ggg, bbb, a.a)"
+ */
+const withAlpha = (color: string, alpha: number) => {
+  const parts = color.match(VALID_COLOR_HEX);
+  if (parts) {
+    const [, r, g, b] = parts;
+    return `rgba(${parseInt(r, 16)},${parseInt(g, 16)},${parseInt(b, 16)},${alpha})`;
+  }
+  return color;
+};
+
 export const getDefaultTheme = (themeColors: Colors = colors): GlobalTheme => ({
 
   // ---- Animation ---- //
@@ -84,8 +101,8 @@ export const getDefaultTheme = (themeColors: Colors = colors): GlobalTheme => ({
   panelBorderRadius: '4px',
   panelPadding: '24px',
   panelMargin: '32px',
-  panelActiveBoxShadow: `0px 0px 4px rgba(${themeColors.blackRGB},0.20)`,
-  panelHoverBoxShadow: `0px 7px 21px rgba(${themeColors.blackRGB},0.07)`,
+  panelActiveBoxShadow: `0px 0px 4px ${withAlpha(themeColors.black, 0.20)}`,
+  panelHoverBoxShadow: `0px 7px 21px ${withAlpha(themeColors.black, 0.07)}`,
 
 
   // ---- Input ---- //
@@ -127,7 +144,7 @@ export const getDefaultTheme = (themeColors: Colors = colors): GlobalTheme => ({
   modalBorder: 'none',
   modalBorderColor: 'transparent',
   modalBorderRadius: '4px',
-  modalBoxShadow: `0px 4px 12px rgba(${themeColors.blackRGB}, 0.15)`,
+  modalBoxShadow: `0px 4px 12px ${withAlpha(themeColors.black, 0.15)}`,
   modalContentPadding: '32px',
   modalFooterBackground: themeColors.secondaryBackground,
   modalFooterHeight: '60px',
@@ -136,7 +153,7 @@ export const getDefaultTheme = (themeColors: Colors = colors): GlobalTheme => ({
   modalHeaderColor: themeColors.primary,
   modalHeaderMarginTop: '24px',
   modalHeaderPadding: '0 32px',
-  modalMaskBackground: `rgba(${themeColors.blackRGB}, 0.45)`,
+  modalMaskBackground: withAlpha(themeColors.black, 0.45),
   modalMinHeight: '200px',
   modalMinWidth: '520px',
 
